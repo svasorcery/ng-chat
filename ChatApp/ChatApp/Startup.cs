@@ -23,8 +23,8 @@ namespace ChatApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
             services.AddSignalR();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +45,11 @@ namespace ChatApp
 
             app.UseStaticFiles();
 
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<Hubs.LoopyHub>("hubs/chat");
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -55,8 +60,6 @@ namespace ChatApp
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-
-            app.UseSignalR();
         }
     }
 }
