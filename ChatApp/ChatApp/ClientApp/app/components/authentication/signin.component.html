@@ -1,0 +1,6 @@
+<h2>Choose external authentication provider</h2>
+<div *ngIf="providers">
+    <div *ngFor="let p of providers">
+        <button (click)="signInExternal(p)" class="btn btn-default">{{ p.displayName }}</button>
+    </div>
+</div>

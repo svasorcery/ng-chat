@@ -9,6 +9,7 @@ import { AuthenticationService } from './components/authentication/authenticatio
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
+import { SignInComponent } from './components/authentication/signin.component';
 
 @NgModule({
     imports: [
@@ -18,6 +19,7 @@ import { HomeComponent } from './components/home/home.component';
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
+            { path: 'signin', component: SignInComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ],
@@ -25,6 +27,7 @@ import { HomeComponent } from './components/home/home.component';
         AppComponent,
         HomeComponent,
         NavMenuComponent,
+        SignInComponent
     ],
     providers: [
         AuthenticationService
