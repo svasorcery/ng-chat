@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using AspNet.Security.OAuth.Vkontakte;
 
 namespace ChatApp
 {
@@ -23,6 +25,21 @@ namespace ChatApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/signin";
+                options.LogoutPath = "/signout";
+            })
+            .AddVkontakte(VkontakteAuthenticationDefaults.AuthenticationScheme, "VK", options =>
+            {
+                options.ClientId = "6128333";
+                options.ClientSecret = "KDx5VB6TbgEcIORvDnw0";
+            });
+            
             services.AddSignalR();
             services.AddMvc();
         }
@@ -44,6 +61,8 @@ namespace ChatApp
             }
 
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseSignalR(routes =>
             {
