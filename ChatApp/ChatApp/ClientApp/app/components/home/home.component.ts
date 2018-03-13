@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { fromPromise } from 'rxjs/observable/fromPromise';
 import { HubConnection } from '@aspnet/signalr-client';
 
 @Component({
@@ -11,7 +13,7 @@ export class HomeComponent implements OnInit {
     message = '';
     messages: string[] = [];
  
-    constructor() { }
+    constructor(private _router: Router) { }
  
     ngOnInit() {
         this._hubConnection = new HubConnection('/hubs/chat');
@@ -21,13 +23,14 @@ export class HomeComponent implements OnInit {
             this.messages.push(received);
         });
  
-        this._hubConnection.start()
-            .then(() => {
-                console.log('Hub connection started')
-            })
-            .catch(err => {
-                console.log('Error while establishing connection')
-            });
+        Observable.fromPromise(this._hubConnection.start())
+            .subscribe(
+                result => console.log('Hub connection started'),
+                error => {
+                    console.log('Error while establishing connection');
+                    this._router.navigate(['signin']);
+                }
+            );
     } 
  
     public sendMessage(): void {
